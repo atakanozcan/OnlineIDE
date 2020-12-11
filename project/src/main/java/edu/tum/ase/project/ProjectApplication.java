@@ -1,7 +1,9 @@
 package edu.tum.ase.project;
 
 import edu.tum.ase.project.model.Project;
+import edu.tum.ase.project.model.SourceFile;
 import edu.tum.ase.project.service.ProjectService;
+import edu.tum.ase.project.service.SourceFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class ProjectApplication implements CommandLineRunner {
 
 	@Autowired
 	ProjectService projectService;
+	
+	@Autowired
+	SourceFileService sourceFileService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectApplication.class, args);
@@ -44,5 +49,10 @@ public class ProjectApplication implements CommandLineRunner {
 		
 		List<Project> projects = projectService.getProjects();
 		log.info("Length of project list = " + projects.size());
+
+		SourceFile sourceFile = sourceFileService.createSourceFile(new SourceFile(project, "testfile"));
+		log.info("ID of saved sourcefile: " + sourceFile.getId());
+		
+		SourceFile s = sourceFileService.findByProjectAndName(project, "testfile");
 	}
 }
