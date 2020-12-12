@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class SourceFileService {
@@ -28,5 +31,24 @@ public class SourceFileService {
     
     public SourceFile findByProjectAndName(Project project, String name){
         return sourceFileRepository.findBySourceFileKey(new SourceFileKey(project, name));
+    }
+    
+    public List<SourceFile> getAllSourceFiles(){
+        return sourceFileRepository.findAll();
+    }
+
+    public List<SourceFile> getAllFilesOfProject(String projectName) {
+        return getAllSourceFiles()
+                .stream()
+                .filter(sourceFile -> sourceFile.getProject().getName().equals(projectName))
+                .collect(Collectors.toList());
+    }
+    
+    public void removeSourceFile(SourceFile sourceFile) {
+        sourceFileRepository.delete(sourceFile);
+    }
+    
+    public void updateSourceFile(SourceFile sourceFile) {
+        sourceFileRepository.save(sourceFile);
     }
 }

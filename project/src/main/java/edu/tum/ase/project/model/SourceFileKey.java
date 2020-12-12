@@ -1,5 +1,6 @@
 package edu.tum.ase.project.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.io.Serializable;
 @Embeddable
 public class SourceFileKey implements Serializable {
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Project project;
     private String name;
     

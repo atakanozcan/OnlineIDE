@@ -1,5 +1,7 @@
 package edu.tum.ase.project.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,6 +18,7 @@ public class SourceFile {
     private SourceFileKey sourceFileKey;
     
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String code;
 
     public Project getProject() {

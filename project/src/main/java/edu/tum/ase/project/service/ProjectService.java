@@ -13,6 +13,7 @@ import java.util.List;
 public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
+    
     private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
     
     public Project createProject(Project project) {
@@ -21,7 +22,7 @@ public class ProjectService {
             return null;
         }
         try {
-            log.info("Create Project. ID=" + project.getId() + " name=" + project.getName());
+            log.info("Create Project with name=" + project.getName());
             return projectRepository.save(project);
         }
         catch (Exception e)
@@ -38,5 +39,9 @@ public class ProjectService {
     public List<Project> getProjects() {
         List<Project> list = projectRepository.findAll();
         return list;
+    }
+    
+    public void deleteProject(Project project) {
+        projectRepository.delete(project);
     }
 }
