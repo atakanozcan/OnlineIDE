@@ -51,8 +51,9 @@ public class ProjectApplication implements CommandLineRunner {
 		log.info("Length of project list = " + projects.size());
 
 		SourceFile sourceFile = sourceFileService.createSourceFile(new SourceFile(project, "testfile"));
-		log.info("ID of saved sourcefile: " + sourceFile.getId());
+		log.info("Source file saved, name: " + sourceFile.getName() + " project ID: " + sourceFile.getProject().getId());
 		
 		SourceFile s = sourceFileService.findByProjectAndName(project, "testfile");
+		log.info("Source was queried, name: " + s.getName() + " project ID: " + s.getProject().getId());
 	}
 }

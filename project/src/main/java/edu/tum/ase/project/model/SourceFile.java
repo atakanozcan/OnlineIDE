@@ -8,40 +8,30 @@ public class SourceFile {
     protected SourceFile(){}
     
     public SourceFile(Project project, String name) {
-        key = new SourceFileKey(project, name);
+        sourceFileKey = new SourceFileKey(project, name);
     }
-    
-    @Id
-    @GeneratedValue
-    private String id;
-    
-    private SourceFileKey key;
+
+    // A SourceFile is uniquely identified by its name (path) and the project it belongs to.
+    @EmbeddedId
+    private SourceFileKey sourceFileKey;
     
     @Lob
     private String code;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public Project getProject() {
-        return key.getProject();
+        return sourceFileKey.getProject();
     }
 
     public void setProject(Project project) {
-        key.setProject(project);
+        sourceFileKey.setProject(project);
     }
 
     public String getName() {
-        return key.getName();
+        return sourceFileKey.getName();
     }
 
     public void setName(String name) {
-        key.setName(name);
+        sourceFileKey.setName(name);
     }
 
     public String getCode() {
@@ -50,5 +40,13 @@ public class SourceFile {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public SourceFileKey getSourceFileKey() {
+        return sourceFileKey;
+    }
+
+    public void setSourceFileKey(SourceFileKey key) {
+        this.sourceFileKey = key;
     }
 }

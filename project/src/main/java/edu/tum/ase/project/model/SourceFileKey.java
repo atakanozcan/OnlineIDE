@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Embeddable
 public class SourceFileKey implements Serializable {
+    
     @ManyToOne
     private Project project;
     private String name;
@@ -17,7 +18,19 @@ public class SourceFileKey implements Serializable {
         this.name = name;
     }
     
-    // TODO: Implement equals() and hashCode()
+    // needed to use SourceFileKey as a Compound ID
+    public boolean equals(SourceFileKey other) {
+        return project.getId().equals(other.getProject().getId())
+                && name.equals(other.getName());
+    }
+
+    // needed to use SourceFileKey as a Compound ID
+    public int hashCode() {
+        int hash = 7;
+        hash = 31 * hash + project.getId().hashCode();
+        hash = 31 * hash + name.hashCode();
+        return hash;
+    }
     
     public Project getProject() {
         return project;
