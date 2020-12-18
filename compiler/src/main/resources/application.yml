@@ -1,0 +1,16 @@
+spring:
+  datasource: # Spring Datasource (DataSourceAutoConfiguration & DataSourceProperties)
+    url: ${url:jdbc:postgresql://localhost:5432/my_db}
+    username: admin
+    password: test
+  # Specifying the SQL dialect makes Hibernate generate better SQL for the chosen database
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true # fixes Hibernate issue: https://github.com/spring-projects/spring-boot/issues/12007
+    hibernate:
+      ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
+        # `ddl-auto` property is used to automatically create the tables based on the entity classes
