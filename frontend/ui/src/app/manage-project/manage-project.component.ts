@@ -11,6 +11,8 @@ import {Project} from "./project";
 
 export class ManageProjectComponent implements OnInit {
   projects: Project[];
+  //num: number = 1;
+  value?: string;
 
   constructor(private service: ProjectService) { }
 
@@ -24,15 +26,19 @@ export class ManageProjectComponent implements OnInit {
   }
 
   addNewProject(): void{
-    console.log("New Project!");
+    this.service.addProject(this.value)
+      .subscribe(project => this.projects.push(project));
+    this.getProjects();
   }
 
   editProject(): void{
     console.log("Goes to the editor");
   }
 
-
-  deleteProject(): void{
-    console.log("Deletes the project");
+  deleteProject(project: Project): void {
+    this.projects = this.projects.filter(h => h !== project);
+    this.service
+      .deleteProject(project.name)
+      .subscribe();
   }
 }

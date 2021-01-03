@@ -20,6 +20,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 registerLocaleData(en);
 
@@ -48,7 +49,8 @@ const routes: Route[] = [
     MonacoEditorModule.forRoot(),
     NzLayoutModule,
     NzTableModule,
-    NzDividerModule
+    NzDividerModule,
+    NzInputModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

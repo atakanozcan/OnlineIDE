@@ -1,6 +1,7 @@
 <body>
 
 <nz-layout>
+
   <nz-header>
     <h1 nz-typography>Project Management</h1>
   </nz-header>
@@ -10,10 +11,13 @@
       <i nz-icon nzType="logout" nzTheme="outline"></i>
     </button>
   </nz-content>
-  <nz-content>
 
+  <nz-content>
     <div>
-      <button nz-button nzType="primary" (click)="addNewProject()">Add New Project</button>
+      <input nz-input #projectNameLabel placeholder="Enter a unique project name" [(ngModel)]="value" />
+      <br/>
+      <br/>
+      <button nz-button nzType="primary" (click)="addNewProject(); projectNameLabel.value = ''; ngOnInit()" >Add New Project</button>
     </div>
   </nz-content>
 
@@ -33,12 +37,11 @@
         <td>
           <a [routerLink]="['/editor']">Open</a>
           <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="deleteProject()">Delete </a>
+            <a (click)="deleteProject(data)">Delete </a>
         </td>
       </tr>
       </tbody>
     </nz-table>
-
   </nz-content>
 
 </nz-layout>
