@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {Injectable, NgModule} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { ManageProjectComponent } from './manage-project/manage-project.component';
@@ -14,10 +14,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {NzListModule} from "ng-zorro-antd/list";
 import {NzIconModule} from "ng-zorro-antd/icon";
-//import {NzMenuModule} from "ng-zorro-antd/menu";
 import { HomeComponent } from './home/home.component';
 import { EditorComponent } from './editor/editor.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 registerLocaleData(en);
 
@@ -43,9 +45,13 @@ const routes: Route[] = [
     NzButtonModule,
     NzListModule,
     NzIconModule,
-    MonacoEditorModule.forRoot()
+    MonacoEditorModule.forRoot(),
+    NzLayoutModule,
+    NzTableModule,
+    NzDividerModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
 })
+
 export class AppModule {}

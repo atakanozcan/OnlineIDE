@@ -1,18 +1,46 @@
-<button nz-button nzType="primary" (click)="addNewProject()">Add New Project</button>
+<body>
 
-<h3 [ngStyle]="{ margin: '16px 0' }">Projects</h3>
-<ul nz-list [nzDataSource]="data" nzBordered nzSize="large">
-  <nz-list-header>Header</nz-list-header>
-  <li nz-list-item *ngFor="let item of data" nzNoFlex>
-    <ul nz-list-item-actions>
-      <nz-list-item-action>
-        <a [routerLink]="['/editor']">Open</a>
-      </nz-list-item-action>
-      <nz-list-item-action>
-        <a (click)="deleteProject()">Delete</a>
-      </nz-list-item-action>
-    </ul>
-    {{ item }}
-  </li>
-  <nz-list-footer>Footer</nz-list-footer>
-</ul>
+<nz-layout>
+  <nz-header>
+    <h1 nz-typography>Project Management</h1>
+  </nz-header>
+
+  <nz-content>
+    <button>
+      <i nz-icon nzType="logout" nzTheme="outline"></i>
+    </button>
+  </nz-content>
+  <nz-content>
+
+    <div>
+      <button nz-button nzType="primary" (click)="addNewProject()">Add New Project</button>
+    </div>
+  </nz-content>
+
+  <nz-content>
+    <nz-table #basicTable [nzData]="projects">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.id }}</td>
+        <td>{{ data.name }}</td>
+        <td>
+          <a [routerLink]="['/editor']">Open</a>
+          <nz-divider nzType="vertical"></nz-divider>
+            <a (click)="deleteProject()">Delete </a>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+
+  </nz-content>
+
+</nz-layout>
+
+</body>
