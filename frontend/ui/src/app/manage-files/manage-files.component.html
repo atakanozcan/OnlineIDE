@@ -26,7 +26,7 @@
       <tr *ngFor="let data of basicTable.data">
         <td>{{ data.name }}</td>
         <td>
-          <a [routerLink]="['/editor']">Open</a>
+          <a [routerLink]="['/editor/' + projectName + '/' + data.name]">Open</a>
           <nz-divider nzType="vertical"></nz-divider>
           <!--<a (click)="deleteProject(data)">Delete </a>-->
         </td>

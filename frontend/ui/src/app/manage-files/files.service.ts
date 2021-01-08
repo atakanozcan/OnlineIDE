@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {SourceFile} from './sourceFile';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -15,9 +16,14 @@ export class FilesService {
 
   projectUrl = 'http://localhost:8080';
 
-  getFiles(project: string): Observable<File[]>{
+  getFiles(project: string): Observable<SourceFile[]>{
     const url = `${this.projectUrl}/${project}`;
-    return this.http.get<File[]>(url, httpOptions).pipe();
+    return this.http.get<SourceFile[]>(url, httpOptions).pipe();
+  }
+
+  getFile(name: string, project: string): Observable<SourceFile> {
+    const url = `${this.projectUrl}/${project}/${name}`;
+    return this.http.get<SourceFile>(url, httpOptions).pipe();
   }
 
   createFile(name: string, project: string): void{

@@ -1,7 +1,7 @@
 import {Project} from '../manage-project/project';
 
-export interface File {
-  project: Project;
+export interface SourceFile {
+  project?: Project;
   name: string;
   code: string;
 }

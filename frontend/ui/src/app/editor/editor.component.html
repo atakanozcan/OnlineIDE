@@ -1,3 +1,5 @@
 
-
-<ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+<nz-header>
+  <h1 nz-typography>{{fileName}}</h1>
+</nz-header>
+<ngx-monaco-editor [options]="editorOptions" [(ngModel)]="file.code"></ngx-monaco-editor>

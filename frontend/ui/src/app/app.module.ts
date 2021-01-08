@@ -29,7 +29,7 @@ const routes: Route[] = [
   {path: '', component: HomeComponent},
   {path: 'projects', component: ManageProjectComponent},
   {path: 'projects/:projectId', component: ManageFilesComponent},
-  {path: 'editor', component: EditorComponent},
+  {path: 'editor/:projectId/:fileName', component: EditorComponent},
   ];
 
 @NgModule({

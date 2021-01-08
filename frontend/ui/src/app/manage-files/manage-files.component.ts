@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {FilesService} from './files.service';
+import {SourceFile} from './sourceFile';
 
 @Component({
   selector: 'app-manage-files',
@@ -10,7 +11,7 @@ import {FilesService} from './files.service';
 })
 export class ManageFilesComponent implements OnInit {
   projectName: string;
-  files: File[];
+  files: SourceFile[];
   newFileName?: string;
 
   constructor(
@@ -19,8 +20,12 @@ export class ManageFilesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.url.subscribe(l => this.projectName = l[1].toString());
+    this.projectNameFromRoute();
     this.getFiles();
+  }
+
+  private projectNameFromRoute(): void {
+    this.route.url.subscribe(pathArray => this.projectName = pathArray[1].toString());
   }
 
   getFiles(): void {
