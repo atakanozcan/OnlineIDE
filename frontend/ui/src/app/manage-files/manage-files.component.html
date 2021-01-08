@@ -2,8 +2,17 @@
 <nz-layout>
 
   <nz-header>
-    <h1 nz-typography>{{projectId}}</h1>
+    <h1 nz-typography>{{projectName}}</h1>
   </nz-header>
+
+  <nz-content>
+    <div>
+      <input nz-input #projectNameLabel placeholder="Enter a project unique file name " [(ngModel)]="newFileName" />
+      <br/>
+      <br/>
+      <button nz-button nzType="primary" (click)="createFile(newFileName, projectName); projectNameLabel.value = ''; ngOnInit()" >Create File</button>
+    </div>
+  </nz-content>
 
   <nz-content>
     <nz-table #basicTable [nzData]="files">

@@ -9,8 +9,9 @@ import {FilesService} from './files.service';
   providers: [FilesService]
 })
 export class ManageFilesComponent implements OnInit {
-  projectId: string;
+  projectName: string;
   files: File[];
+  newFileName?: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -18,17 +19,16 @@ export class ManageFilesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.url.subscribe(l => this.projectId = l[1].toString());
+    this.route.url.subscribe(l => this.projectName = l[1].toString());
     this.getFiles();
   }
 
   getFiles(): void {
-    this.service.getFiles(this.projectId).subscribe(files =>
-      {
-        this.files = files;
-        console.warn(files.length);
-      }
-    );
+    this.service.getFiles(this.projectName).subscribe(files => this.files = files);
+  }
+
+  createFile(name: string, project: string): void{
+    this.service.createFile(name, project);
   }
 
 }

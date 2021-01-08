@@ -11,7 +11,7 @@ import {Project} from './project';
 
 export class ManageProjectComponent implements OnInit {
   projects: Project[];
-  value?: string;
+  newProjectName?: string;
 
   constructor(private service: ProjectService) { }
 
@@ -25,7 +25,7 @@ export class ManageProjectComponent implements OnInit {
   }
 
   addNewProject(): void{
-    this.service.addProject(this.value)
+    this.service.addProject(this.newProjectName)
       .subscribe(project => this.projects.push(project));
     this.getProjects();
   }

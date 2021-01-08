@@ -15,7 +15,7 @@
 
   <nz-content>
     <div>
-      <input nz-input #projectNameLabel placeholder="Enter a unique project name" [(ngModel)]="value" />
+      <input nz-input #projectNameLabel placeholder="Enter a unique project name" [(ngModel)]="newProjectName" />
       <br/>
       <br/>
       <button nz-button nzType="primary" (click)="addNewProject(); projectNameLabel.value = ''; ngOnInit()" >Add New Project</button>
