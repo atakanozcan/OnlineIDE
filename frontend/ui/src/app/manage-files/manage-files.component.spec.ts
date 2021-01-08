@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageSourcefilesComponent } from './manage-sourcefiles.component';
+import { ManageFilesComponent } from './manage-files.component';
 
-describe('ManageSourcefilesComponent', () => {
-  let component: ManageSourcefilesComponent;
-  let fixture: ComponentFixture<ManageSourcefilesComponent>;
+describe('ManageFilesComponent', () => {
+  let component: ManageFilesComponent;
+  let fixture: ComponentFixture<ManageFilesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ManageSourcefilesComponent ]
+      declarations: [ ManageFilesComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ManageSourcefilesComponent);
+    fixture = TestBed.createComponent(ManageFilesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

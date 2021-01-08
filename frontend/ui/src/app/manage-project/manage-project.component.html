@@ -1,5 +1,4 @@
 <body>
-
 <nz-layout>
 
   <nz-header>
@@ -37,7 +36,7 @@
         <td>{{ data.id }}</td>
         <td>{{ data.name }}</td>
         <td>
-          <a [routerLink]="['/editor']">Open</a>
+          <a [routerLink]="['/projects/' + data.name]">Open</a>
           <nz-divider nzType="vertical"></nz-divider>
             <a (click)="deleteProject(data)">Delete </a>
         </td>

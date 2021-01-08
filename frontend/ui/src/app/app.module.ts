@@ -3,7 +3,7 @@ import {Injectable, NgModule} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { ManageProjectComponent } from './manage-project/manage-project.component';
-import {Route, Router, RouterModule} from "@angular/router";
+import {Route, Router, RouterModule} from '@angular/router';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
@@ -11,9 +11,9 @@ import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {NzButtonModule} from "ng-zorro-antd/button";
-import {NzListModule} from "ng-zorro-antd/list";
-import {NzIconModule} from "ng-zorro-antd/icon";
+import {NzButtonModule} from 'ng-zorro-antd/button';
+import {NzListModule} from 'ng-zorro-antd/list';
+import {NzIconModule} from 'ng-zorro-antd/icon';
 import { HomeComponent } from './home/home.component';
 import { EditorComponent } from './editor/editor.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
@@ -21,14 +21,15 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { ManageSourcefilesComponent } from './manage-sourcefiles/manage-sourcefiles.component';
+import { ManageFilesComponent } from './manage-files/manage-files.component';
 
 registerLocaleData(en);
 
 const routes: Route[] = [
   {path: '', component: HomeComponent},
   {path: 'projects', component: ManageProjectComponent},
-  {path: 'editor', component: EditorComponent}
+  {path: 'projects/:projectId', component: ManageFilesComponent},
+  {path: 'editor', component: EditorComponent},
   ];
 
 @NgModule({
@@ -37,7 +38,7 @@ const routes: Route[] = [
     ManageProjectComponent,
     HomeComponent,
     EditorComponent,
-    ManageSourcefilesComponent
+    ManageFilesComponent
   ],
   imports: [
     BrowserModule,
