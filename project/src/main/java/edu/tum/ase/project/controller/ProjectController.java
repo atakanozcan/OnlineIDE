@@ -11,31 +11,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:4200")
 public class ProjectController {
     private static final Logger log = LoggerFactory.getLogger(ProjectController.class);
-    
+
     @Autowired
     ProjectService projectService;
-    
+
     @Autowired
     SourceFileService sourceFileService;
-    
+
     @PostMapping("/projects")
     public Project createProject(@RequestParam String name) {
         log.info("createProject('"+name+"')");
         return projectService.createProject(new Project(name));
     }
-    
+
     @GetMapping("/projects/{name}")
     public Project getProject(@PathVariable String name) {
         return projectService.findByName(name);
     }
-    
+
     @GetMapping("/projects")
     public List<Project> getAllProjects(){
         return projectService.getProjects();
     }
-    
+
     @DeleteMapping("/{projectName}")
     public void deleteProject(@PathVariable String projectName) {
         // when a project gets deleted, all of its source files should also be deleted
@@ -46,6 +47,6 @@ public class ProjectController {
                 .forEach(sourceFile -> sourceFileService.removeSourceFile(sourceFile));
         projectService.deleteProject(projectService.findByName(projectName));
     }
-    
+
     //TODO PUT Mapping for changing project name
 }

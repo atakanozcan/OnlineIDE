@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ProjectService} from "./project.service";
-import {Project} from "./project";
+import {ProjectService} from './project.service';
+import {Project} from './project';
 
 @Component({
   selector: 'app-manage-project',
@@ -11,12 +11,11 @@ import {Project} from "./project";
 
 export class ManageProjectComponent implements OnInit {
   projects: Project[];
-  //num: number = 1;
   value?: string;
 
   constructor(private service: ProjectService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getProjects();
   }
 
@@ -32,7 +31,7 @@ export class ManageProjectComponent implements OnInit {
   }
 
   editProject(): void{
-    console.log("Goes to the editor");
+    console.log('Goes to the editor');
   }
 
   deleteProject(project: Project): void {

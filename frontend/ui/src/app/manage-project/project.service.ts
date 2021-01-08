@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Project} from "./project";
-import {Observable} from "rxjs";
-import {catchError} from "rxjs/operators";
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Project} from './project';
+import {Observable} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -15,11 +15,11 @@ const httpOptions = {
 })
 export class ProjectService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   projectUrl = 'http://localhost:8080';
 
-  num: number = 1;
+  num = 1;
 
   /** GET projects from the server */
   getProjects(): Observable<Project[]> {

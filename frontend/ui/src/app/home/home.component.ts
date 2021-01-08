@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  login() {
-    this.router.navigate(['','projects']); // define your component where you want to go
+  login(): void {
+    this.router.navigate(['', 'projects']); // define your component where you want to go
   }
 }

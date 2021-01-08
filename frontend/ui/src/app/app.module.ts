@@ -21,6 +21,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { ManageSourcefilesComponent } from './manage-sourcefiles/manage-sourcefiles.component';
 
 registerLocaleData(en);
 
@@ -35,7 +36,8 @@ const routes: Route[] = [
     AppComponent,
     ManageProjectComponent,
     HomeComponent,
-    EditorComponent
+    EditorComponent,
+    ManageSourcefilesComponent
   ],
   imports: [
     BrowserModule,
