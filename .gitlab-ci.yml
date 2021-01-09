@@ -1,0 +1,25 @@
+# This template uses jdk8 for verifying and deploying images
+image: maven:3.3.9-jdk-8
+
+# Stages
+stages: 
+    - build
+    - test
+    - package
+
+# Build Job
+build: 
+    stage: build
+    script: mvn clean compile
+
+# Test Job
+test:
+    stage: test
+    script: mvn test
+
+# Package Job
+package:
+    stage: package
+    script: mvn package
+    variables:
+        MAVEN_OPTS: "-DskipTests=true"
