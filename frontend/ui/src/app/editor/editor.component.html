@@ -3,3 +3,10 @@
   <h1 nz-typography>{{fileName}}</h1>
 </nz-header>
 <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="file.code"></ngx-monaco-editor>
+
+<!-- <button nz-button nzType="primary" (click)="createFile(newFileName, projectName);
+ projectNameLabel.value = ''; ngOnInit()" >Create File</button> -->
+
+<nz-content>
+  <button nz-button (click)="updateSourceCode()">Save</button>
+</nz-content>

@@ -33,4 +33,11 @@ export class FilesService {
     this.http.post<any>(url, '', httpOptions).subscribe(response => console.log(response));
     console.log(`File created, name: ${name}, project: ${project}`);
   }
+
+  updateSourceCode(fileName: string, project: string, sourceCode: string): void {
+    const url = `${this.projectUrl}/${project}/${fileName}`;
+    this.http.put<any>(url, sourceCode, httpOptions)
+      .subscribe(response => console.log(`response: ${response}`));
+    console.log(`${project}/${fileName} source code updated to: ${sourceCode}`);
+  }
 }

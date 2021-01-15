@@ -32,4 +32,8 @@ export class EditorComponent implements OnInit {
   loadFile(): void {
     this.service.getFile(this.fileName, this.projectName).subscribe(file => this.file = file);
   }
+
+  updateSourceCode(): void {
+    this.service.updateSourceCode(this.fileName, this.projectName, this.file.code);
+  }
 }

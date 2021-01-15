@@ -40,7 +40,7 @@ public class SourceFileController {
 
     @PutMapping("/{projectName}/{fileName}")
     public SourceFile updateSourceCode(@PathVariable String projectName, @PathVariable String fileName,
-                                       @RequestParam String sourceCode) {
+                                       @RequestBody String sourceCode) {
         SourceFile sourceFile = sourceFileService
                 .findByProjectAndName(projectService.findByName(projectName), fileName);
         sourceFile.setCode(sourceCode);
