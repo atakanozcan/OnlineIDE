@@ -39,13 +39,19 @@ export class FilesService {
 
   updateSourceCode(fileName: string, project: string, sourceCode: string): void {
     const url = `${this.projectUrl}/${project}/${fileName}`;
+    this.http.put<any>(url, sourceCode, httpOptions)
+      .subscribe(response => console.log(`response: ${response}`));
     console.log(`${project}/${fileName} source code updated to: ${sourceCode}`);
-    this.http.put<any>(url, sourceCode, httpOptions);
   }
 
   deleteFile(name: string, project: string): Observable<any>{
     const url = `${this.projectUrl}/${project}/${name}`;
     console.log(`${project}/${name} was deleted`);
     return this.http.delete(url, httpOptions);
+  }
+
+  renameFile(name: string, project: string, newName: string): Observable<any>{
+    const url = `${this.projectUrl}/${project}/${name}/rename`;
+    return this.http.put(url, newName, httpOptions);
   }
 }

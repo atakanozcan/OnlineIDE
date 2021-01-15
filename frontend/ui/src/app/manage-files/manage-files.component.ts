@@ -49,4 +49,18 @@ export class ManageFilesComponent implements OnInit {
     this.service.deleteFile(name, project).subscribe(resp => this.getFiles());
   }
 
+  renameFile(name: string, newName: string): void{
+    this.service.checkForFile(newName, this.projectName).subscribe(exists => {
+      if(exists){
+        console.log(`Cannot rename ${name} to ${newName} since ${newName} already exists`)
+      } else{
+        this.service.renameFile(name, this.projectName, newName).subscribe(resp => {
+          this.getFiles();
+          console.log(`File was renamed from ${name} to ${newName}!`)
+        });
+      }
+    })
+
+  }
+
 }

@@ -6,6 +6,14 @@
   </nz-header>
 
   <nz-content>
+    <button>
+      <a [routerLink]="['/projects']">
+        <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+      </a>
+    </button>
+  </nz-content>
+
+  <nz-content>
     <div>
       <input nz-input #projectNameLabel placeholder="Enter a project unique file name " [(ngModel)]="newFileName" />
       <br/>
@@ -13,6 +21,8 @@
       <button nz-button nzType="primary" (click)="createFile(newFileName, projectName); projectNameLabel.value = ''; ngOnInit()" >Create File</button>
     </div>
   </nz-content>
+
+
 
   <nz-content>
     <nz-table #basicTable [nzData]="files">
@@ -27,9 +37,9 @@
         <td>{{ data.name }}</td>
         <td>
           <a [routerLink]="['/editor/' + projectName + '/' + data.name]">Open</a>
-          <a nz-button (click)="deleteFile(data.name, projectName)">Delete</a>
+          <a nz-button nzType="link" (click)="deleteFile(data.name, projectName)">Delete</a>
+          <a nz-button nzType="link" (click)="renameFile(data.name, newFileName)">Rename</a>
           <nz-divider nzType="vertical"></nz-divider>
-          <!--<a (click)="deleteProject(data)">Delete </a>-->
         </td>
       </tr>
       </tbody>

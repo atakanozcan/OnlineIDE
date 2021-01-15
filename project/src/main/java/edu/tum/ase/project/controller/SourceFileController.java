@@ -48,5 +48,13 @@ public class SourceFileController {
         return sourceFile;
     }
 
-    //TODO PUT Mapping for renaming file
+    @PutMapping("/{projectName}/{fileName}/rename")
+    public SourceFile renameFile(@PathVariable String projectName, @PathVariable String fileName,
+                                 @RequestBody String newName){
+        SourceFile sourceFile = getSourceFile(projectName, fileName);
+        sourceFileService.removeSourceFile(sourceFile);
+        sourceFile.setName(newName);
+        sourceFileService.updateSourceFile(sourceFile);
+        return sourceFile;
+    }
 }
