@@ -29,11 +29,24 @@ export class ManageFilesComponent implements OnInit {
   }
 
   getFiles(): void {
-    this.service.getFiles(this.projectName).subscribe(files => this.files = files);
+    this.service.getAllFiles(this.projectName).subscribe(files => this.files = files);
   }
 
   createFile(name: string, project: string): void{
-    this.service.createFile(name, project);
+    this.service.checkForFile(name, project).subscribe(exists => {
+      if (exists) {
+        console.log(`File ${name} already exists in project ${project}`)
+      } else {
+        this.service.createFile(name, project).subscribe(resp => {
+          console.log(`New file ${name} was created in project ${project}`)
+          this.getFiles();
+        })
+      }
+    })
+  }
+
+  deleteFile(name: string, project: string): void{
+    this.service.deleteFile(name, project).subscribe(resp => this.getFiles());
   }
 
 }

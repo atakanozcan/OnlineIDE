@@ -27,6 +27,7 @@
         <td>{{ data.name }}</td>
         <td>
           <a [routerLink]="['/editor/' + projectName + '/' + data.name]">Open</a>
+          <a nz-button (click)="deleteFile(data.name, projectName)">Delete</a>
           <nz-divider nzType="vertical"></nz-divider>
           <!--<a (click)="deleteProject(data)">Delete </a>-->
         </td>

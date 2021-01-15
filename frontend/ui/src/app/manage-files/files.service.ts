@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {SourceFile} from './sourceFile';
+import {map} from "rxjs/operators";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -16,7 +17,7 @@ export class FilesService {
 
   projectUrl = 'http://localhost:8080';
 
-  getFiles(project: string): Observable<SourceFile[]>{
+  getAllFiles(project: string): Observable<SourceFile[]>{
     const url = `${this.projectUrl}/${project}`;
     return this.http.get<SourceFile[]>(url, httpOptions).pipe();
   }
@@ -26,18 +27,25 @@ export class FilesService {
     return this.http.get<SourceFile>(url, httpOptions).pipe();
   }
 
-  createFile(name: string, project: string): void{
-    // TODO: check if there is already a file with the same name.
-    //  here or maybe in manage-files component. -> should there be an error message?
+  checkForFile(name: string, project: string): Observable<boolean>{
     const url = `${this.projectUrl}/${project}/${name}`;
-    this.http.post<any>(url, '', httpOptions).subscribe(response => console.log(response));
-    console.log(`File created, name: ${name}, project: ${project}`);
+    return this.http.get(url, {observe: 'response'}).pipe(map(resp => resp.body != null))
+  }
+
+  createFile(name: string, project: string): Observable<any> {
+    const url = `${this.projectUrl}/${project}/${name}`;
+    return this.http.post(url, '', httpOptions)
   }
 
   updateSourceCode(fileName: string, project: string, sourceCode: string): void {
     const url = `${this.projectUrl}/${project}/${fileName}`;
-    this.http.put<any>(url, sourceCode, httpOptions)
-      .subscribe(response => console.log(`response: ${response}`));
     console.log(`${project}/${fileName} source code updated to: ${sourceCode}`);
+    this.http.put<any>(url, sourceCode, httpOptions);
+  }
+
+  deleteFile(name: string, project: string): Observable<any>{
+    const url = `${this.projectUrl}/${project}/${name}`;
+    console.log(`${project}/${name} was deleted`);
+    return this.http.delete(url, httpOptions);
   }
 }
