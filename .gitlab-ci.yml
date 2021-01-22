@@ -10,16 +10,16 @@ stages:
 # Build Job
 build: 
     stage: build
-    script: mvn clean compile --projects :compiler
+    script: mvn -f ./compiler/pom.xml clean compile 
 
 # Test Job
 test:
     stage: test
-    script: mvn test --projects :compiler
+    script: mvn -f ./compiler/pom.xml test
 
 # Package Job
 package:
     stage: package
-    script: mvn package --projects :compiler
+    script: mvn -f ./compiler/pom.xml package
     variables:
         MAVEN_OPTS: "-DskipTests=true"
