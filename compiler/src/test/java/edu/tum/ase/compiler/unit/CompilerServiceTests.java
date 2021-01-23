@@ -28,7 +28,9 @@ public class CompilerServiceTests {
     private  static final String fileName = "App.java";
 
     private static final String[] stderr = {"App.java:1: error: ';' expected",
-            "public class App{public static void main(String[] args) {System.out.println(\"Hello World!\")}}", "^", "1 error"};
+            "public class App{public static void main(String[] args) {System.out.println(\"Hello World!\")}}",
+            "                                                                                           ^",
+            "1 error\n"};
     @Test
     public void should_ReturnNoStdErr_WhenCodeCompiles() throws IOException {
         //given
