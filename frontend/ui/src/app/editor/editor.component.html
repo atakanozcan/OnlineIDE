@@ -4,5 +4,10 @@
 <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="file.code"></ngx-monaco-editor>
 
 <nz-content>
-  <button nz-button (click)="updateSourceCode()">Save</button>
+  <button nz-button (click)="saveFile()">Save</button>
+  <button nz-button (click)="compileFile(file)">Compile</button>
+</nz-content>
+
+<nz-content>
+  <h4>{{compilationResult}}</h4>
 </nz-content>

@@ -2,21 +2,25 @@ import { Component, OnInit} from '@angular/core';
 import {FilesService} from '../manage-files/files.service';
 import {ActivatedRoute} from '@angular/router';
 import {SourceFile} from '../manage-files/sourceFile';
+import {CompilerService} from "./compiler.service";
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css'],
-  providers: [FilesService]
+  providers: [FilesService, CompilerService]
 })
 export class EditorComponent implements OnInit {
 
   editorOptions :any;
   projectName: string;
   fileName: string;
+  compilationResult: string;
   file: SourceFile = {name: '', code: ''};
 
-  constructor(private service: FilesService, private route: ActivatedRoute) { }
+  constructor(private filesService: FilesService,
+              private compiler: CompilerService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.fillProjectAndFileName();
@@ -31,15 +35,15 @@ export class EditorComponent implements OnInit {
   }
 
   loadFile(): void {
-    this.service.getFile(this.fileName, this.projectName).subscribe(file => {
+    this.filesService.getFile(this.fileName, this.projectName).subscribe(file => {
       this.file = file;
       this.editorOptions = {theme: 'vs-dark', language: this.deductProgrammingLanguage(file.name)};
       console.log(this.editorOptions)
     });
   }
 
-  updateSourceCode(): void {
-    this.service.updateSourceCode(this.fileName, this.projectName, this.file.code);
+  saveFile(): void {
+    this.filesService.updateSourceCode(this.fileName, this.projectName, this.file.code);
   }
 
   deductProgrammingLanguage(filename: string): string {
@@ -55,5 +59,16 @@ export class EditorComponent implements OnInit {
       }
     }
     return "";
+  }
+
+  compileFile(file: SourceFile): void {
+    this.compiler.compile(file).subscribe(response =>{
+      console.log(response)
+      if(response.compilable) {
+        this.compilationResult = "Successfully compiled. Output: " + response.stdout;
+      } else {
+        this.compilationResult = response.stderr;
+      }
+    })
   }
 }
