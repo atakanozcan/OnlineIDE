@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {FilesService} from '../manage-files/files.service';
 import {ActivatedRoute} from '@angular/router';
 import {SourceFile} from '../manage-files/sourceFile';
@@ -10,7 +10,8 @@ import {SourceFile} from '../manage-files/sourceFile';
   providers: [FilesService]
 })
 export class EditorComponent implements OnInit {
-  editorOptions = {theme: 'vs-dark', language: 'javascript'};
+
+  editorOptions :any;
   projectName: string;
   fileName: string;
   file: SourceFile = {name: '', code: ''};
@@ -30,10 +31,29 @@ export class EditorComponent implements OnInit {
   }
 
   loadFile(): void {
-    this.service.getFile(this.fileName, this.projectName).subscribe(file => this.file = file);
+    this.service.getFile(this.fileName, this.projectName).subscribe(file => {
+      this.file = file;
+      this.editorOptions = {theme: 'vs-dark', language: this.deductProgrammingLanguage(file.name)};
+      console.log(this.editorOptions)
+    });
   }
 
   updateSourceCode(): void {
     this.service.updateSourceCode(this.fileName, this.projectName, this.file.code);
+  }
+
+  deductProgrammingLanguage(filename: string): string {
+    let splits = filename.split(".");
+    let fileExtension = splits[splits.length - 1]
+    if(fileExtension == "java") {
+      return "java"
+    }
+    let cExtensions = ["c", "h", "cpp", "hpp", "cc", "C", "CPP", "c++", "cxx", "ii"]
+    for (let extension of cExtensions) {
+      if(fileExtension == extension) {
+        return "c"
+      }
+    }
+    return "";
   }
 }
