@@ -30,7 +30,7 @@ public class CompilerServiceTests {
         SourceCode sourceCode = new SourceCode();
         String rightJavaCode = "public class App{public static void main(String[] args) {System.out.println(\"Hello World!\");}}";
         sourceCode.setCode(rightJavaCode);
-        sourceCode.setFileName(javaFileName);
+        sourceCode.setName(javaFileName);
 
         //when
         SourceCode result = serviceUnderTest.compile(sourceCode);
@@ -46,7 +46,7 @@ public class CompilerServiceTests {
         SourceCode sourceCode = new SourceCode();
         String rightCCode = "#include<stdio.h>\n" + "int main(){printf (\"Hi World\\n\");return 0;}";
         sourceCode.setCode(rightCCode);
-        sourceCode.setFileName(cFileName);
+        sourceCode.setName(cFileName);
 
         //when
         SourceCode result = serviceUnderTest.compile(sourceCode);
@@ -62,7 +62,7 @@ public class CompilerServiceTests {
         SourceCode sourceCode = new SourceCode();
         String wrongJavaCode = "public class App{public static void main(String[] args) {System.out.println(\"Hello World!\")}}";
         sourceCode.setCode(wrongJavaCode);
-        sourceCode.setFileName(javaFileName);
+        sourceCode.setName(javaFileName);
 
         //when
         SourceCode result = serviceUnderTest.compile(sourceCode);
@@ -78,7 +78,7 @@ public class CompilerServiceTests {
         SourceCode sourceCode = new SourceCode();
         String wrongCCode = "#include<stdio.h>\n" + "int main(){printf (\"Hi World\\n\");return 0}";
         sourceCode.setCode(wrongCCode);
-        sourceCode.setFileName(cFileName);
+        sourceCode.setName(cFileName);
 
         //when
         SourceCode result = serviceUnderTest.compile(sourceCode);
@@ -94,7 +94,7 @@ public class CompilerServiceTests {
         SourceCode sourceCode = new SourceCode();
         String rightCCode = "#include <stdio.h> int main() { printf(\"Hello, World!\"); return 0;}";
         sourceCode.setCode(rightCCode);
-        sourceCode.setFileName("");
+        sourceCode.setName("");
 
         //when
         SourceCode result = serviceUnderTest.compile(sourceCode);

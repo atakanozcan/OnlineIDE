@@ -39,7 +39,7 @@ public class CompilerServiceTests {
         SourceCode sourceCode = new SourceCode();
         String rightCode = "public class App{public static void main(String[] args) {System.out.println(\"Hello World!\");}}";
         sourceCode.setCode(rightCode);
-        sourceCode.setFileName(fileName);
+        sourceCode.setName(fileName);
 
         //when
         SourceCode result = serviceUnderTest.compile(sourceCode);
@@ -57,7 +57,7 @@ public class CompilerServiceTests {
         SourceCode sourceCode = new SourceCode();
         String wrongCode = "public class App{public static void main(String[] args) {System.out.println(\"Hello World!\")}}";
         sourceCode.setCode(wrongCode);
-        sourceCode.setFileName(fileName);
+        sourceCode.setName(fileName);
 
         //when
         SourceCode result = serviceUnderTest.compile(sourceCode);

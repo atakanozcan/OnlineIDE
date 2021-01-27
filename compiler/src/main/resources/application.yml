@@ -1,3 +1,4 @@
+
 spring:
   datasource: # Spring Datasource (DataSourceAutoConfiguration & DataSourceProperties)
     url: ${url:jdbc:postgresql://localhost:5432/my_db}
@@ -14,3 +15,5 @@ spring:
     hibernate:
       ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
         # `ddl-auto` property is used to automatically create the tables based on the entity classes
+server:
+  port: 8082

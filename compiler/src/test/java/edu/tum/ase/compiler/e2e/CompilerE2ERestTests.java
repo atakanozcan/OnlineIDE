@@ -36,7 +36,7 @@ public class CompilerE2ERestTests {
         SourceCode sourceCode = new SourceCode();
         String rightJavaCode = "public class App{public static void main(String[] args) {System.out.println(\"Hello World!\");}}";
         sourceCode.setCode(rightJavaCode);
-        sourceCode.setFileName(javaFileName);
+        sourceCode.setName(javaFileName);
 
         //when
         ResultActions result = systemUnderTest.perform(post(URL)
@@ -47,7 +47,7 @@ public class CompilerE2ERestTests {
         result
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(sourceCode.getCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getFileName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.compilable").value(true))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.stderr").isEmpty());
     }
@@ -58,7 +58,7 @@ public class CompilerE2ERestTests {
         SourceCode sourceCode = new SourceCode();
         String wrongJavaCode = "public class App{public static void main(String[] args) {System.out.println(\"Hello World!\")}}";
         sourceCode.setCode(wrongJavaCode);
-        sourceCode.setFileName(javaFileName);
+        sourceCode.setName(javaFileName);
 
         //when
         ResultActions result = systemUnderTest.perform(post(URL)
@@ -69,7 +69,7 @@ public class CompilerE2ERestTests {
         result
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(sourceCode.getCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getFileName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.compilable").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.stderr").isNotEmpty());
     }
@@ -80,7 +80,7 @@ public class CompilerE2ERestTests {
         SourceCode sourceCode = new SourceCode();
         String rightCCode = "#include<stdio.h>\n" + "int main(){printf (\"Hi World\\n\");return 0;}";
         sourceCode.setCode(rightCCode);
-        sourceCode.setFileName(cFileName);
+        sourceCode.setName(cFileName);
 
         //when
         ResultActions result = systemUnderTest.perform(post(URL)
@@ -91,7 +91,7 @@ public class CompilerE2ERestTests {
         result
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(sourceCode.getCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getFileName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.compilable").value(true))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.stderr").isEmpty());
     }
@@ -102,7 +102,7 @@ public class CompilerE2ERestTests {
         SourceCode sourceCode = new SourceCode();
         String wrongCCode = "#include<stdio.h>\n" + "int main(){printf (\"Hi World\\n\");return 0}";
         sourceCode.setCode(wrongCCode);
-        sourceCode.setFileName(cFileName);
+        sourceCode.setName(cFileName);
 
         //when
         ResultActions result = systemUnderTest.perform(post(URL)
@@ -113,7 +113,7 @@ public class CompilerE2ERestTests {
         result
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(sourceCode.getCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getFileName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.compilable").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.stderr").isNotEmpty());
     }

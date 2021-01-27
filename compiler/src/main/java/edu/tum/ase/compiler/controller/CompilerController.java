@@ -2,14 +2,12 @@ package edu.tum.ase.compiler.controller;
 
 import edu.tum.ase.compiler.model.SourceCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @RestController
+@CrossOrigin("http://localhost:4200")
 public class CompilerController {
     @Autowired
     private CompilerService compilerService;

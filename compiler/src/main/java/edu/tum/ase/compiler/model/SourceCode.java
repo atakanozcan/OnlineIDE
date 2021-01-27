@@ -3,7 +3,7 @@ package edu.tum.ase.compiler.model;
 public class SourceCode {
 
     private String code;
-    private String fileName;
+    private String name;
     private String stdout = "";
     private String stderr = "";
     private boolean compilable = false;
@@ -20,12 +20,12 @@ public class SourceCode {
         this.code = code;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getName() {
+        return name;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStdout() {

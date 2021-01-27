@@ -16,7 +16,6 @@ public class CompilerService {
     }
 
     public SourceCode compile(SourceCode sourceCode) throws IOException {
-
         Process process = null;
         BufferedReader reader = null;
         InputStream stream = null;
@@ -25,25 +24,35 @@ public class CompilerService {
         String command = "";
 
         //Create the executable file from sourcecode object
-        File executableFile = new File(sourceCode.getFileName());
+        File executableFile = new File(sourceCode.getName());
         executableFile.createNewFile();
 
         //Delete file after JVM terminates
         executableFile.deleteOnExit();
-        Path path = Paths.get(sourceCode.getFileName());
+        Path path = Paths.get(sourceCode.getName());
         Files.write(path, sourceCode.getCode().getBytes());
 
         //Specify the compiler
-        if ( sourceCode.getFileName().split("\\.")[1].equals("java")){
-            command = "javac";
+        try {
+            String extension = sourceCode.getName().split("\\.")[1];
+            if (extension.equals("java")) {
+                command = "javac";
+            } else if (extension.equals("c")) {
+                command = "gcc";
+            } else {
+                sourceCode.setStderr("Invalid File Extension!");
+                return sourceCode;
+            }
+        } catch (Exception e) {
+            sourceCode.setStderr("Invalid File Extension!");
+            return sourceCode;
         }
-        else if ( sourceCode.getFileName().split("\\.")[1].equals("c")){
-            command = "gcc";
-        }
+
+
 
         //Compile the file
         try {
-            process = Runtime.getRuntime().exec(command+" "+sourceCode.getFileName());
+            process = Runtime.getRuntime().exec(command+" "+sourceCode.getName());
             reader = new BufferedReader( new InputStreamReader(process.getErrorStream()));
             while ((line = reader.readLine())!= null)
             {
