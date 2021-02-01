@@ -17,6 +17,8 @@ export class EditorComponent implements OnInit {
   fileName: string;
   compilationResult: string;
   file: SourceFile = {name: '', code: ''};
+  lastSavedCode: string;
+  saveWarning: string;
 
   constructor(private filesService: FilesService,
               private compiler: CompilerService,
@@ -44,6 +46,8 @@ export class EditorComponent implements OnInit {
 
   saveFile(): void {
     this.filesService.updateSourceCode(this.fileName, this.projectName, this.file.code);
+    this.lastSavedCode = this.file.code;
+    this.saveWarning = "";
   }
 
   deductProgrammingLanguage(filename: string): string {
@@ -62,6 +66,10 @@ export class EditorComponent implements OnInit {
   }
 
   compileFile(file: SourceFile): void {
+    if(this.lastSavedCode != this.file.code){
+      this.saveWarning = "You need to save the file first!"
+      return
+    }
     this.compiler.compile(file).subscribe(response =>{
       console.log(response)
       if(response.compilable) {
