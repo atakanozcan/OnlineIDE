@@ -8,15 +8,20 @@ import javax.persistence.*;
 @Table(name = "project_source_file")
 public class SourceFile {
     protected SourceFile(){}
-    
+
     public SourceFile(Project project, String name) {
         sourceFileKey = new SourceFileKey(project, name);
+    }
+
+    public SourceFile(Project project, String name, String code){
+        this(project, name);
+        this.code = code;
     }
 
     // A SourceFile is uniquely identified by its name (path) and the project it belongs to.
     @EmbeddedId
     private SourceFileKey sourceFileKey;
-    
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String code;

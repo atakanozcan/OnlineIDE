@@ -42,4 +42,9 @@ export class ProjectService {
     return this.http.post<Project>(url, '', options).pipe();
   }
 
+  renameProject(oldName: string, newName: string): Observable<Project> {
+    const url = `${this.projectUrl}/projects/${oldName}`;
+    return this.http.put<Project>(url, newName).pipe();
+  }
+
 }

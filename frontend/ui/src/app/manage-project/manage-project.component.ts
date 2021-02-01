@@ -40,4 +40,11 @@ export class ManageProjectComponent implements OnInit {
       .deleteProject(project.name)
       .subscribe();
   }
+
+  renameProject(project: Project): void {
+    console.log(`Component.renameProject(${project.name})`);
+    this.service.renameProject(project.name, this.newProjectName).subscribe(
+      p => this.getProjects()
+    )
+  }
 }

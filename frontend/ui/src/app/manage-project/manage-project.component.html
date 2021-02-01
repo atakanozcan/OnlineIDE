@@ -38,7 +38,9 @@
         <td>
           <a [routerLink]="['/projects/' + data.name]">Open</a>
           <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="deleteProject(data)">Delete </a>
+          <a (click)="deleteProject(data)">Delete </a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a (click)="renameProject(data)">Rename </a>
         </td>
       </tr>
       </tbody>

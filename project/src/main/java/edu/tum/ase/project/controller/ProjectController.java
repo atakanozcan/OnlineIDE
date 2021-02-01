@@ -1,6 +1,7 @@
 package edu.tum.ase.project.controller;
 
 import edu.tum.ase.project.model.Project;
+import edu.tum.ase.project.model.SourceFile;
 import edu.tum.ase.project.service.ProjectService;
 import edu.tum.ase.project.service.SourceFileService;
 import org.slf4j.Logger;
@@ -48,5 +49,17 @@ public class ProjectController {
         projectService.deleteProject(projectService.findByName(projectName));
     }
 
-    //TODO PUT Mapping for changing project name
+    @PutMapping("/projects/{oldName}")
+    public Project renameProject(@PathVariable String oldName, @RequestBody String newName) {
+        Project newProject = new Project(newName);
+        projectService.createProject(newProject);
+        sourceFileService.getAllFilesOfProject(oldName)
+                .stream()
+                .forEach(sourceFile ->
+                    sourceFileService.createSourceFile(new SourceFile(newProject,
+                            sourceFile.getName(), sourceFile.getCode()))
+                );
+        deleteProject(oldName);
+        return newProject;
+    }
 }
