@@ -13,6 +13,7 @@ import java.util.List;
 
 @SpringBootApplication
 @RestController
+//@EnableOAuth2Sso don't we need this?
 public class SpringAngularOauth2Application {
 
     public static void main(String[] args) {

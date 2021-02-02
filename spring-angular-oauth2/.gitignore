@@ -438,3 +438,4 @@ typings/
 
 # IDE
 *.iml
+/src/main/resources/static/
