@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  compiler:
+    build:
+      dockerfile: Dockerfile
+      context: ./compiler
+    image: compiler:latest
+    restart: on-failure
+    ports:
+    - 8082:8082
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    image: frontend:latest
+    restart: on-failure
+    ports:
+    - 80:4200
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=my_db
+  project:
+    build:
+      dockerfile: Dockerfile
+      context: ./project
+    image: project:latest
+    restart: on-failure
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/my_db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=test
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      #- JDBC_URL=jdbc:postgresql://db:5432/my_db?user=admin&password=test
+    ports:
+    - 8080:8080
+  dark-mode:
+    build:
+      dockerfile: Dockerfile
+      context: ./compiler
