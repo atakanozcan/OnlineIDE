@@ -17,7 +17,7 @@ public class Project {
     public Project(String name) {
         this.name = name;
     }
-    // getters and setters
+
     public String getId() {
         return id;
     }
@@ -33,7 +33,7 @@ public class Project {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     @Override
     public String toString() {
         return String.format("Project[id=%s, name=%s]", id, name);

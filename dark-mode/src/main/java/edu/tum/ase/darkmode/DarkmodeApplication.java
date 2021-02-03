@@ -21,7 +21,9 @@ public class DarkmodeApplication {
 	}
 
 	@RequestMapping(path = "/dark-mode", method = RequestMethod.GET)
+
 	public boolean getDarkModeStatus() {
 		return isDarkModeOn;
 	}
+
 }
