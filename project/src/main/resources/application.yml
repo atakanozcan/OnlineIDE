@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: dev
+  application:
+    name: project-service
+server:
+    port: ${PORT:8080} # or ${PORT:8081} eureka:
+      client:
+        serviceUrl:
+    defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
 ---
 spring:
   config:
