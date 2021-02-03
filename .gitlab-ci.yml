@@ -3,17 +3,17 @@ image: maven:3.6.3-jdk-8
 
 before_script:
     - apt-get update && apt-get install -y gcc
-    
+
 # Stages
-stages: 
+stages:
     - build
     - test
     - package
 
 # Build Job
-build: 
+build:
     stage: build
-    script: mvn -f ./compiler/pom.xml clean compile 
+    script: mvn -f ./compiler/pom.xml clean compile
 
 # Test Job
 test:
@@ -23,6 +23,8 @@ test:
 # Package Job
 package:
     stage: package
-    script: mvn -f ./compiler/pom.xml package
-    variables:
-        MAVEN_OPTS: "-DskipTests=true"
+    script:
+        - echo "LOOOOOOK AAAT MEEEE"
+        - ls
+        - chmod +x package-all.sh
+        - ./package-all.sh
