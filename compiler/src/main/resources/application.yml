@@ -1,6 +1,7 @@
 
 spring:
-  name: compiler-service
+  application:
+    name: compiler-service
   datasource: # Spring Datasource (DataSourceAutoConfiguration & DataSourceProperties)
     url: ${url:jdbc:postgresql://localhost:5432/my_db}
     username: admin
