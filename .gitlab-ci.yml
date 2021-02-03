@@ -1,30 +1,132 @@
 # This template uses jdk8 for verifying and deploying images
 image: maven:3.6.3-jdk-8
 
+cache:
+    key: ${CI_COMMIT_REF_SLUG}
+
 before_script:
     - apt-get update && apt-get install -y gcc
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
 
 # Stages
 stages:
     - build
     - test
     - package
+    - publish
 
-# Build Job
-build:
+# Build Jobs
+compiler:build:
     stage: build
     script: mvn -f ./compiler/pom.xml clean compile
+
+project:build:
+    stage: build
+    script: mvn -f ./project/pom.xml clean compile
+
+dark-mode:build:
+    stage: build
+    script: mvn -f ./dark-mode/pom.xml clean compile
+
+frontend:build:
+    stage: build
+    script:
+        - cd frontend
+        - ng build --prod --outputPath=../src/main/resources/static/
+        - mvn clean compile
+
 
 # Test Job
 test:
     stage: test
     script: mvn -f ./compiler/pom.xml test
 
-# Package Job
-package:
+# Package Jobs
+project:package:
     stage: package
     script:
-        - echo "LOOOOOOK AAAT MEEEE"
-        - ls
-        - chmod +x package-all.sh
-        - ./package-all.sh
+        - cd project
+        - ./mvnw package -DskipTests
+
+compiler:package:
+    stage: package
+    script:
+        - cd compiler
+        - ./mvnw package -DskipTests
+
+frontend:package:
+    stage: package
+    script:
+        - cd frontend
+        - ./mvnw package -DskipTests
+
+dark-mode:package:
+    stage: package
+    script:
+        - cd dark-mode
+        - ./mvnw package -DskipTests
+
+# Publish Job
+project:publish:
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/project
+    script:
+        - cd project
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+
+frontend:publish:
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/frontend
+    script:
+        - cd frontend
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+
+compiler:publish:
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/compiler
+    script:
+        - cd compiler
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+
+dark-mode:publish:
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/dark-mode
+    script:
+        - cd dark-mode
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
