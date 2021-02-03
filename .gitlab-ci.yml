@@ -23,20 +23,44 @@ stages:
 compiler:build:
     stage: build
     script: mvn -f ./compiler/pom.xml clean compile
+    artifacts:
+        paths:
+            - compiler/target
+    rules:
+        - changes:
+            - compiler/**/*
 
 project:build:
     stage: build
     script: mvn -f ./project/pom.xml clean compile
+    artifacts:
+        paths:
+            - project/target
+    rules:
+        - changes:
+            - project/**/*
 
 dark-mode:build:
     stage: build
     script: mvn -f ./dark-mode/pom.xml clean compile
+    artifacts:
+        paths:
+            - dark-mode/target
+    rules:
+        - changes:
+            - dark-mode/**/*
 
 frontend:build:
     stage: build
     script:
         - cd frontend
         - mvn clean compile
+    artifacts:
+        paths:
+            - frontend/target
+    rules:
+        - changes:
+            - frontend/**/*
 
 
 # Test Job
@@ -46,31 +70,65 @@ test:
 
 # Package Jobs
 project:package:
+    dependencies:
+        - project:build
     stage: package
     script:
         - cd project
         - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - project/target/*.jar
+    rules:
+        - changes:
+            - project/**/*
 
 compiler:package:
+    dependencies:
+        - compiler:build
     stage: package
     script:
         - cd compiler
         - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - compiler/target/*.jar
+    rules:
+        - changes:
+              - compiler/**/*
 
 frontend:package:
+    dependencies:
+        - frontend:build
     stage: package
     script:
         - cd frontend
         - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - frontend/target/*.jar
+    rules:
+        - changes:
+              - frontend/**/*
 
 dark-mode:package:
+    dependencies:
+        - dark-mode:build
     stage: package
     script:
         - cd dark-mode
         - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - dark-mode/target/*.jar
+    rules:
+        - changes:
+              - dark-mode/**/*
 
 # Publish Job
 project:publish:
+    dependencies:
+        - project:package
     stage: publish
     image: docker:stable
     services:
@@ -84,8 +142,13 @@ project:publish:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
+    rules:
+        - changes:
+              - project/**/*
 
 frontend:publish:
+    dependencies:
+        - frontend:package
     stage: publish
     image: docker:stable
     services:
@@ -99,8 +162,13 @@ frontend:publish:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
+    rules:
+        - changes:
+              - frontend/**/*
 
 compiler:publish:
+    dependencies:
+        - compiler:package
     stage: publish
     image: docker:stable
     services:
@@ -114,8 +182,13 @@ compiler:publish:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
+    rules:
+        - changes:
+              - compiler/**/*
 
 dark-mode:publish:
+    dependencies:
+        - dark-mode:package
     stage: publish
     image: docker:stable
     services:
@@ -129,3 +202,6 @@ dark-mode:publish:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
+    rules:
+        - changes:
+              - dark-mode/**/*
