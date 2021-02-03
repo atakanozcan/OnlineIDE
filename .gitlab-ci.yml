@@ -36,7 +36,6 @@ frontend:build:
     stage: build
     script:
         - cd frontend
-        - ng build --prod --outputPath=../src/main/resources/static/
         - mvn clean compile
 
 
