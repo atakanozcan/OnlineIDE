@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 public class ProjectController {
     private static final Logger log = LoggerFactory.getLogger(ProjectController.class);
-
     @Autowired
     ProjectService projectService;
 
