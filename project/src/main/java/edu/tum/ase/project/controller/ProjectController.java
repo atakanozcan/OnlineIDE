@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost")
+@CrossOrigin("http://35.238.235.228")
 public class ProjectController {
     private static final Logger log = LoggerFactory.getLogger(ProjectController.class);
-
     @Autowired
     ProjectService projectService;
 

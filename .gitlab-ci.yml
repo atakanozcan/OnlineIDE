@@ -18,6 +18,7 @@ stages:
     - test
     - package
     - publish
+    - deploy
 
 # Build Jobs
 compiler:build:
@@ -26,8 +27,8 @@ compiler:build:
     artifacts:
         paths:
             - compiler/target
-    rules:
-        - changes:
+    only:
+        changes:
             - compiler/**/*
 
 project:build:
@@ -36,8 +37,8 @@ project:build:
     artifacts:
         paths:
             - project/target
-    rules:
-        - changes:
+    only:
+        changes:
             - project/**/*
 
 dark-mode:build:
@@ -46,8 +47,8 @@ dark-mode:build:
     artifacts:
         paths:
             - dark-mode/target
-    rules:
-        - changes:
+    only:
+        changes:
             - dark-mode/**/*
 
 frontend:build:
@@ -58,15 +59,18 @@ frontend:build:
     artifacts:
         paths:
             - frontend/target
-    rules:
-        - changes:
+    only:
+        changes:
             - frontend/**/*
 
 
 # Test Job
-test:
+compiler:test:
     stage: test
     script: mvn -f ./compiler/pom.xml test
+    only:
+        changes:
+            - compiler/**/*
 
 # Package Jobs
 project:package:
@@ -79,9 +83,13 @@ project:package:
     artifacts:
         paths:
             - project/target/*.jar
-    rules:
-        - changes:
+    only:
+        changes:
             - project/**/*
+        refs:
+            - sheet13
+            - master
+
 
 compiler:package:
     dependencies:
@@ -93,9 +101,12 @@ compiler:package:
     artifacts:
         paths:
             - compiler/target/*.jar
-    rules:
-        - changes:
-              - compiler/**/*
+    only:
+        changes:
+            - compiler/**/*
+        refs:
+            - sheet13
+            - master
 
 frontend:package:
     dependencies:
@@ -107,9 +118,12 @@ frontend:package:
     artifacts:
         paths:
             - frontend/target/*.jar
-    rules:
-        - changes:
-              - frontend/**/*
+    only:
+        changes:
+            - frontend/**/*
+        refs:
+            - sheet13
+            - master
 
 dark-mode:package:
     dependencies:
@@ -121,9 +135,12 @@ dark-mode:package:
     artifacts:
         paths:
             - dark-mode/target/*.jar
-    rules:
-        - changes:
-              - dark-mode/**/*
+    only:
+        changes:
+            - dark-mode/**/*
+        refs:
+            - sheet13
+            - master
 
 # Publish Job
 project:publish:
@@ -142,9 +159,12 @@ project:publish:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
-    rules:
-        - changes:
-              - project/**/*
+    only:
+        changes:
+            - project/**/*
+        refs:
+            - sheet13
+            - master
 
 frontend:publish:
     dependencies:
@@ -162,9 +182,12 @@ frontend:publish:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
-    rules:
-        - changes:
-              - frontend/**/*
+    only:
+        changes:
+            - frontend/**/*
+        refs:
+            - sheet13
+            - master
 
 compiler:publish:
     dependencies:
@@ -182,9 +205,12 @@ compiler:publish:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
-    rules:
-        - changes:
-              - compiler/**/*
+    only:
+        changes:
+            - compiler/**/*
+        refs:
+            - sheet13
+            - master
 
 dark-mode:publish:
     dependencies:
@@ -202,6 +228,29 @@ dark-mode:publish:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
-    rules:
-        - changes:
-              - dark-mode/**/*
+    only:
+        changes:
+            - dark-mode/**/*
+        refs:
+            - sheet13
+            - master
+
+deploy:
+    stage: deploy
+    image: ubuntu:18.04
+    variables:
+        SSH_HOST: gitlab@35.238.235.228
+    only:
+        refs:
+            - sheet13
+            - master
+    script:
+        - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+        - eval $(ssh-agent -s)
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - echo "$SSH_PRIVATE_KEY" | ssh-add -
+        - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+        - scp -r docker-compose.prod.yml $SSH_HOST:~/
+        - ssh $SSH_HOST "sudo docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+        - ssh $SSH_HOST "sudo docker-compose -f docker-compose.prod.yml pull && sudo docker-compose -f docker-compose.prod.yml up --force-recreate -d"
