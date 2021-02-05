@@ -3,6 +3,8 @@ spring:
     name: frontend-service
 server:
   port: ${PORT:4200}
+  servlet:
+    context-path: /ui
 eureka:
   client:
     serviceUrl:

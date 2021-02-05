@@ -15,7 +15,7 @@ const httpOptions = {
 export class FilesService {
   constructor(private http: HttpClient) { }
 
-  projectUrl = 'http://localhost:8080';
+  projectUrl = 'project-service';
 
   getAllFiles(project: string): Observable<SourceFile[]>{
     const url = `${this.projectUrl}/${project}`;

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@CrossOrigin("http://localhost:4200")
 public class CompilerController {
     @Autowired
     private CompilerService compilerService;
