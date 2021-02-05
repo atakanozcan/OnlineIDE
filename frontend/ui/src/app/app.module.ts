@@ -42,7 +42,7 @@ const routes: Route[] = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes,{useHash:true}), //https://stackoverflow.com/questions/50907736/refreshing-the-page-results-in-404-error-angular-6/52474599
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
