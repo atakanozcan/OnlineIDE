@@ -9,7 +9,7 @@ spring:
   datasource: # Spring Datasource (DataSourceAutoConfiguration & DataSourceProperties)
     url: ${url:jdbc:postgresql://localhost:5432/my_db}
     username: admin
-    password: test
+    password: onlineide
   # Specifying the SQL dialect makes Hibernate generate better SQL for the chosen database
   jpa:
     properties:
@@ -40,3 +40,18 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+
+---
+security:
+  oauth2:
+    client:
+      clientId: ${OAUTH_CLIENT_ID:bfbc0b497fbd2cac04e29dd8436bf2f176645b74261176520e2a88b585aa554a} # DONE: add client id
+      clientSecret: ${OAUTH_CLIENT_SECRET:fb4fe0894cb78a62abc27e50a90444be973fa06780f4d03da5695f3c9810e459} # DONE: add client secret
+      accessTokenUri: https://gitlab.lrz.de/oauth/token
+      userAuthorizationUri: https://gitlab.lrz.de/oauth/authorize
+      scope:
+        - read_user
+        - api
+    resource:
+      userInfoUri: https://gitlab.lrz.de/api/v4/user
+

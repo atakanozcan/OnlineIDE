@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ProjectService {
@@ -39,6 +40,17 @@ public class ProjectService {
     public List<Project> getProjects() {
         List<Project> list = projectRepository.findAll();
         return list;
+    }
+
+    public Set<String> getUserIds(String projectName){
+        Project p = projectRepository.findByName(projectName);
+        return p.getUserIds();
+    }
+
+    public Project addUserId(String projectName, String userId){
+        Project p = projectRepository.findByName(projectName);
+        p.addUser(userId);
+        return projectRepository.save(p);
     }
     
     public void deleteProject(Project project) {
