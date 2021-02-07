@@ -22,15 +22,17 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { ManageFilesComponent } from './manage-files/manage-files.component';
+import {AuthGuard} from "./auth.guard";
 
 registerLocaleData(en);
 
 const routes: Route[] = [
-  {path: '', component: HomeComponent},
-  {path: 'projects', component: ManageProjectComponent},
-  {path: 'projects/:projectId', component: ManageFilesComponent},
-  {path: 'editor/:projectId/:fileName', component: EditorComponent},
-  ];
+  {path: 'home', component: HomeComponent},
+  {path: 'projects', component: ManageProjectComponent, canActivate: [AuthGuard]},
+  {path: 'projects/:projectId', component: ManageFilesComponent, canActivate: [AuthGuard]},
+  {path: 'editor/:projectId/:fileName', component: EditorComponent, canActivate: [AuthGuard]},
+  {path: '**', redirectTo: 'home'},
+];
 
 @NgModule({
   declarations: [
@@ -42,7 +44,7 @@ const routes: Route[] = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes,{useHash:true}), //https://stackoverflow.com/questions/50907736/refreshing-the-page-results-in-404-error-angular-6/52474599
+    RouterModule.forRoot(routes),
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,

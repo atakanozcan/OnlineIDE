@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectService} from './project.service';
 import {Project} from './project';
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'app-manage-project',
@@ -13,7 +14,7 @@ export class ManageProjectComponent implements OnInit {
   projects: Project[];
   newProjectName?: string;
 
-  constructor(private service: ProjectService) { }
+  constructor(private service: ProjectService, public authService: AuthService) { }
 
   ngOnInit(): void {
     this.getProjects();

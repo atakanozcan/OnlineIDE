@@ -13,7 +13,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class CompilerService {
-  compilerUrl = "compiler-service"
+  compilerUrl = "/compiler"
   constructor(private http: HttpClient) {}
 
   compile(file: SourceFile): Observable<SourceFile>{

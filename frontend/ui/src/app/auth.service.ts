@@ -24,6 +24,7 @@ export class AuthService {
   public checkAuthentication(): void {
     this.httpClient.get<boolean>('/authenticated')
       .subscribe((authenticated) => {
+        console.log(authenticated);
         this.authenticated$.next(authenticated);
       }, (err) => {
         this.authenticated$.next(false);

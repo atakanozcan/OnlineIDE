@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
     return this.authService.authenticated
-    //pipe each value that is emitted by the observable
+      //pipe each value that is emitted by the observable
       .pipe (
         //tap will intercept each emission of a value and perform some action
         tap(authenticated => {
