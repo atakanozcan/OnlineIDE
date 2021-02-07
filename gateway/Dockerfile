@@ -1,11 +1,11 @@
-# compiler Dockerfile
+# gateway Dockerfile
 FROM openjdk:8-jdk-alpine
 
 WORKDIR /app
 
 COPY target/*.jar app.jar
 
-EXPOSE 8082
+EXPOSE 8000
 
 ENV JAVA_OPTS=""
 

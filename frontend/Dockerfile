@@ -7,4 +7,6 @@ COPY target/*.jar app.jar
 
 EXPOSE 4200
 
-CMD java -jar /app/app.jar
+ENV JAVA_OPTS=""
+
+ENTRYPOINT [ "sh", "-c", "java -jar $JAVA_OPTS /app/app.jar"]

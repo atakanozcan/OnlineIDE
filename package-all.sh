@@ -12,3 +12,11 @@ cd ../project
 
 cd ../spring-angular-oauth2
 bash package.sh
+
+cd ../discoveryserver
+./mvnw package -DskipTests
+
+cd ../gateway
+./mvnw package -DskipTests
+
+echo "EVERYTHING PACKAGED :)"
