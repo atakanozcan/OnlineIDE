@@ -7,7 +7,9 @@ import edu.tum.ase.project.repository.SourceFileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -61,7 +63,7 @@ public class SourceFileService {
 
 
     @Bean
-    public OAuth2RestOperations restTemplate(OAuth2ClientContext context) {
+    public OAuth2RestOperations restTemplate(@Qualifier("oauth2ClientContext") OAuth2ClientContext context) {
         ClientCredentialsResourceDetails details = new ClientCredentialsResourceDetails();
         return new OAuth2RestTemplate(details, context);
     }

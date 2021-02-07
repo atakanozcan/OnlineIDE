@@ -47,4 +47,9 @@ export class ProjectService {
     return this.http.put<Project>(url, newName).pipe();
   }
 
+  shareProject(userId: string, projectName: string): Observable<Project> {
+    const url = `${this.projectUrl}/projects/${projectName}/${userId}`;
+    return this.http.get<Project>(url).pipe();
+  }
+
 }

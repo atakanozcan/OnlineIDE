@@ -13,7 +13,7 @@
 
   <nz-content>
     <div>
-      <input nz-input #projectNameLabel placeholder="Enter a unique project name" [(ngModel)]="newProjectName" />
+      <input nz-input #projectNameLabel placeholder="Enter a project or a user name" [(ngModel)]="newProjectName" />
       <br/>
       <br/>
       <button nz-button nzType="primary" (click)="addNewProject(); projectNameLabel.value = ''; ngOnInit()" >Add New Project</button>
@@ -38,7 +38,9 @@
           <nz-divider nzType="vertical"></nz-divider>
           <a (click)="deleteProject(data)">Delete </a>
           <nz-divider nzType="vertical"></nz-divider>
-          <a (click)="renameProject(data)">Rename </a>
+          <a (click)="renameProject(data); projectNameLabel.value = ''; ngOnInit()">Rename </a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a (click)="shareProject(data);  projectNameLabel.value = ''; ngOnInit()">Share </a>
         </td>
       </tr>
       </tbody>

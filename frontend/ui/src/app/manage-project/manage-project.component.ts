@@ -13,6 +13,7 @@ import {AuthService} from "../auth.service";
 export class ManageProjectComponent implements OnInit {
   projects: Project[];
   newProjectName?: string;
+  userName?: string;
 
   constructor(private service: ProjectService, public authService: AuthService) { }
 
@@ -27,8 +28,10 @@ export class ManageProjectComponent implements OnInit {
 
   addNewProject(): void{
     this.service.addProject(this.newProjectName)
-      .subscribe(project => this.projects.push(project));
-    this.getProjects();
+      .subscribe(project => {
+        this.projects.push(project);
+        this.getProjects();
+      })
   }
 
   editProject(): void{
@@ -47,5 +50,9 @@ export class ManageProjectComponent implements OnInit {
     this.service.renameProject(project.name, this.newProjectName).subscribe(
       p => this.getProjects()
     )
+  }
+
+  shareProject(project: Project): void {
+    this.service.shareProject(this.newProjectName, project.name).subscribe()
   }
 }
