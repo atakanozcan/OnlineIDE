@@ -63,6 +63,29 @@ frontend:build:
         changes:
             - frontend/**/*
 
+discoveryserver:build:
+    stage: build
+    script:
+        - cd discoveryserver
+        - mvn clean compile
+    artifacts:
+        paths:
+            - discoveryserver/target
+    only:
+        changes:
+            - discoveryserver/**/*
+
+gateway:build:
+    stage: build
+    script:
+        - cd gateway
+        - mvn clean compile
+    artifacts:
+        paths:
+            - gateway/target
+    only:
+        changes:
+            - gateway/**/*
 
 # Test Job
 compiler:test:
@@ -87,8 +110,8 @@ project:package:
         changes:
             - project/**/*
         refs:
-            - sheet13
             - master
+            - deploy
 
 
 compiler:package:
@@ -105,8 +128,8 @@ compiler:package:
         changes:
             - compiler/**/*
         refs:
-            - sheet13
             - master
+            - deploy
 
 frontend:package:
     dependencies:
@@ -122,8 +145,8 @@ frontend:package:
         changes:
             - frontend/**/*
         refs:
-            - sheet13
             - master
+            - deploy
 
 dark-mode:package:
     dependencies:
@@ -139,10 +162,44 @@ dark-mode:package:
         changes:
             - dark-mode/**/*
         refs:
-            - sheet13
             - master
+            - deploy
 
-# Publish Job
+discoveryserver:package:
+    dependencies:
+        - discoveryserver:build
+    stage: package
+    script:
+        - cd discoveryserver
+        - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - discoveryserver/target/*.jar
+    only:
+        changes:
+            - discoveryserver/**/*
+        refs:
+            - master
+            - deploy
+
+gateway:package:
+    dependencies:
+        - gateway:build
+    stage: package
+    script:
+        - cd gateway
+        - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - gateway/target/*.jar
+    only:
+        changes:
+            - gateway/**/*
+        refs:
+            - master
+            - deploy
+
+# Publish Jobs
 project:publish:
     dependencies:
         - project:package
@@ -163,8 +220,8 @@ project:publish:
         changes:
             - project/**/*
         refs:
-            - sheet13
             - master
+            - deploy
 
 frontend:publish:
     dependencies:
@@ -186,8 +243,8 @@ frontend:publish:
         changes:
             - frontend/**/*
         refs:
-            - sheet13
             - master
+            - deploy
 
 compiler:publish:
     dependencies:
@@ -209,8 +266,8 @@ compiler:publish:
         changes:
             - compiler/**/*
         refs:
-            - sheet13
             - master
+            - deploy
 
 dark-mode:publish:
     dependencies:
@@ -232,8 +289,54 @@ dark-mode:publish:
         changes:
             - dark-mode/**/*
         refs:
-            - sheet13
             - master
+            - deploy
+
+discoveryserver:publish:
+    dependencies:
+        - discoveryserver:package
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/discoveryserver
+    script:
+        - cd project
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+    only:
+        changes:
+            - project/**/*
+        refs:
+            - master
+            - deploy
+
+gateway:publish:
+    dependencies:
+        - gateway:package
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/gateway
+    script:
+        - cd project
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+    only:
+        changes:
+            - project/**/*
+        refs:
+            - master
+            - deploy
 
 deploy:
     stage: deploy
@@ -242,8 +345,8 @@ deploy:
         SSH_HOST: gitlab@35.238.235.228
     only:
         refs:
-            - sheet13
             - master
+            - deploy
     script:
         - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
         - eval $(ssh-agent -s)
