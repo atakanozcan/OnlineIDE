@@ -16,7 +16,7 @@ export class ProjectService {
 
   constructor(private http: HttpClient) { }
 
-  projectUrl = 'project-service';
+  projectUrl = '/project';
 
   num = 1;
 

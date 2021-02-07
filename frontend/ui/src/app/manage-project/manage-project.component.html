@@ -6,10 +6,8 @@
   </nz-header>
 
   <nz-content>
-    <button>
-      <a [routerLink]="['/']">
-        <i nz-icon nzType="logout" nzTheme="outline"></i>
-      </a>
+    <button *ngIf="authService.authenticated | async" (click)="authService.logout()">
+      <i nz-icon nzType="logout" nzTheme="outline"></i>
     </button>
   </nz-content>
 

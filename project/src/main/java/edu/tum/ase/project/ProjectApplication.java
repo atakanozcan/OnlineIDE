@@ -13,6 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 
 import javax.sql.DataSource;
@@ -23,6 +25,8 @@ import java.util.List;
 @EnableOAuth2Client
 @SpringBootApplication
 @EnableEurekaClient
+@EnableResourceServer
+@EnableOAuth2Client
 public class ProjectApplication implements CommandLineRunner {
 	private static final Logger log = LoggerFactory.getLogger(ProjectApplication.class);
 
