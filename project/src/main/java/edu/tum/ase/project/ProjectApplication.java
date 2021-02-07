@@ -25,8 +25,6 @@ import java.util.List;
 @EnableOAuth2Client
 @SpringBootApplication
 @EnableEurekaClient
-@EnableResourceServer
-@EnableOAuth2Client
 public class ProjectApplication implements CommandLineRunner {
 	private static final Logger log = LoggerFactory.getLogger(ProjectApplication.class);
 
