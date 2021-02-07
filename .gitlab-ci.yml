@@ -1,28 +1,256 @@
 # This template uses jdk8 for verifying and deploying images
 image: maven:3.6.3-jdk-8
 
+cache:
+    key: ${CI_COMMIT_REF_SLUG}
+
 before_script:
     - apt-get update && apt-get install -y gcc
-    
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
 # Stages
-stages: 
+stages:
     - build
     - test
     - package
+    - publish
+    - deploy
 
-# Build Job
-build: 
+# Build Jobs
+compiler:build:
     stage: build
-    script: mvn -f ./compiler/pom.xml clean compile 
+    script: mvn -f ./compiler/pom.xml clean compile
+    artifacts:
+        paths:
+            - compiler/target
+    only:
+        changes:
+            - compiler/**/*
+
+project:build:
+    stage: build
+    script: mvn -f ./project/pom.xml clean compile
+    artifacts:
+        paths:
+            - project/target
+    only:
+        changes:
+            - project/**/*
+
+dark-mode:build:
+    stage: build
+    script: mvn -f ./dark-mode/pom.xml clean compile
+    artifacts:
+        paths:
+            - dark-mode/target
+    only:
+        changes:
+            - dark-mode/**/*
+
+frontend:build:
+    stage: build
+    script:
+        - cd frontend
+        - mvn clean compile
+    artifacts:
+        paths:
+            - frontend/target
+    only:
+        changes:
+            - frontend/**/*
+
 
 # Test Job
-test:
+compiler:test:
     stage: test
     script: mvn -f ./compiler/pom.xml test
+    only:
+        changes:
+            - compiler/**/*
 
-# Package Job
-package:
+# Package Jobs
+project:package:
+    dependencies:
+        - project:build
     stage: package
-    script: mvn -f ./compiler/pom.xml package
+    script:
+        - cd project
+        - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - project/target/*.jar
+    only:
+        changes:
+            - project/**/*
+        refs:
+            - sheet13
+            - master
+
+
+compiler:package:
+    dependencies:
+        - compiler:build
+    stage: package
+    script:
+        - cd compiler
+        - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - compiler/target/*.jar
+    only:
+        changes:
+            - compiler/**/*
+        refs:
+            - sheet13
+            - master
+
+frontend:package:
+    dependencies:
+        - frontend:build
+    stage: package
+    script:
+        - cd frontend
+        - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - frontend/target/*.jar
+    only:
+        changes:
+            - frontend/**/*
+        refs:
+            - sheet13
+            - master
+
+dark-mode:package:
+    dependencies:
+        - dark-mode:build
+    stage: package
+    script:
+        - cd dark-mode
+        - ./mvnw package -DskipTests
+    artifacts:
+        paths:
+            - dark-mode/target/*.jar
+    only:
+        changes:
+            - dark-mode/**/*
+        refs:
+            - sheet13
+            - master
+
+# Publish Job
+project:publish:
+    dependencies:
+        - project:package
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
     variables:
-        MAVEN_OPTS: "-DskipTests=true"
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/project
+    script:
+        - cd project
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+    only:
+        changes:
+            - project/**/*
+        refs:
+            - sheet13
+            - master
+
+frontend:publish:
+    dependencies:
+        - frontend:package
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/frontend
+    script:
+        - cd frontend
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+    only:
+        changes:
+            - frontend/**/*
+        refs:
+            - sheet13
+            - master
+
+compiler:publish:
+    dependencies:
+        - compiler:package
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/compiler
+    script:
+        - cd compiler
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+    only:
+        changes:
+            - compiler/**/*
+        refs:
+            - sheet13
+            - master
+
+dark-mode:publish:
+    dependencies:
+        - dark-mode:package
+    stage: publish
+    image: docker:stable
+    services:
+        - docker:18-dind
+    variables:
+        DOCKER_DRIVER: overlay2
+        DOCKER_HOST: tcp://docker:2375
+        IMAGE_NAME: $CI_REGISTRY_IMAGE/dark-mode
+    script:
+        - cd dark-mode
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker build --tag $IMAGE_NAME:latest .
+        - docker push $IMAGE_NAME:latest
+    only:
+        changes:
+            - dark-mode/**/*
+        refs:
+            - sheet13
+            - master
+
+deploy:
+    stage: deploy
+    image: ubuntu:18.04
+    variables:
+        SSH_HOST: gitlab@35.238.235.228
+    only:
+        refs:
+            - sheet13
+            - master
+    script:
+        - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+        - eval $(ssh-agent -s)
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - echo "$SSH_PRIVATE_KEY" | ssh-add -
+        - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+        - scp -r docker-compose.prod.yml $SSH_HOST:~/
+        - ssh $SSH_HOST "sudo docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+        - ssh $SSH_HOST "sudo docker-compose -f docker-compose.prod.yml pull && sudo docker-compose -f docker-compose.prod.yml up --force-recreate -d"

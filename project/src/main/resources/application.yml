@@ -29,7 +29,7 @@ spring:
   datasource: # Spring Datasource (DataSourceAutoConfiguration & DataSourceProperties)
     url: ${url:jdbc:postgresql://localhost:5432/my_db}
     username: admin
-    password: test
+    password: onlineide
   # Specifying the SQL dialect makes Hibernate generate better SQL for the chosen database
   jpa:
     properties:

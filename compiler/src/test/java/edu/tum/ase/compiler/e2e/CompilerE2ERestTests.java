@@ -47,7 +47,7 @@ public class CompilerE2ERestTests {
         result
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(sourceCode.getCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(sourceCode.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.compilable").value(true))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.stderr").isEmpty());
     }
@@ -69,7 +69,7 @@ public class CompilerE2ERestTests {
         result
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(sourceCode.getCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(sourceCode.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.compilable").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.stderr").isNotEmpty());
     }
@@ -91,7 +91,7 @@ public class CompilerE2ERestTests {
         result
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(sourceCode.getCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(sourceCode.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.compilable").value(true))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.stderr").isEmpty());
     }
@@ -113,7 +113,7 @@ public class CompilerE2ERestTests {
         result
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(sourceCode.getCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fileName").value(sourceCode.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(sourceCode.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.compilable").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.stderr").isNotEmpty());
     }
