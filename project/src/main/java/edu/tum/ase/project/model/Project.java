@@ -26,8 +26,9 @@ public class Project {
     // no-args constructor required by JPA spec
     // this one is protected since it shouldn't be used directly
     }
-    public Project(String name) {
+    public Project(String name, String userId) {
         this.name = name;
+        addUser(userId);
     }
 
     public String getId() {

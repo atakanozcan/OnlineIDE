@@ -49,7 +49,7 @@ public class ProjectApplication implements CommandLineRunner {
 			projectName = projectName + Math.round(Math.random()*10);
 		}
 
-		Project project = projectService.createProject(new Project(projectName));
+		Project project = projectService.createProject(new Project(projectName, "gedfgd"));
 		log.info("ID of saved project = " + project.getId());
 
 		Project p = projectService.findByName(projectName);
