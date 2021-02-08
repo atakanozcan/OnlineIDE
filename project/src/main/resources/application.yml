@@ -1,13 +1,18 @@
 spring:
-  profiles:
-    active: prod
   application:
     name: project-service
-    port: ${PORT:8080} # or ${PORT:8081}
-  jba:
+  jpa:
+    hibernate:
+      ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
+      # `ddl-auto` property is used to automatically create the tables based on the entity classes
+      use-new-id-generator-mappings: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true # fixes Hibernate issue: https://github.com/spring-projects/spring-boot/issues/12007
+
 
 eureka:
   client:
@@ -25,47 +30,4 @@ security:
         - api
     resource:
       userInfoUri: https://gitlab.lrz.de/api/v4/user
----
-spring:
-  config:
-    activate:
-      on-profile: prod
-  datasource: # Spring Datasource (DataSourceAutoConfiguration & DataSourceProperties)
-    url: ${url:jdbc:postgresql://localhost:5432/my_db}
-    username: admin
-    password: onlineide
-  # Specifying the SQL dialect makes Hibernate generate better SQL for the chosen database
-  jpa:
-    hibernate:
-      ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
-      # `ddl-auto` property is used to automatically create the tables based on the entity classes
-      use-new-id-generator-mappings: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc:
-          lob:
-            non_contextual_creation: true # fixes Hibernate issue: https://github.com/spring-projects/spring-boot/issues/12007
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-  datasource: # Spring Datasource (DataSourceAutoConfiguration & DataSourceProperties)
-    url: ${url:jdbc:h2:mem:testdb}
-    driverClassName: org.h2.Driver
-    username: admin
-    password: test
-  # Specifying the SQL dialect makes Hibernate generate better SQL for the chosen database
-  jpa:
-    hibernate:
-      ddl-auto: create-drop # Hibernate ddl auto (create, create-drop, validate, update)
-      # `ddl-auto` property is used to automatically create the tables based on the entity classes
-      use-new-id-generator-mappings: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc:
-          lob:
-            non_contextual_creation: true
 
