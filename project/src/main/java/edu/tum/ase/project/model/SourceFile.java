@@ -1,5 +1,6 @@
 package edu.tum.ase.project.model;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -9,37 +10,44 @@ import javax.persistence.*;
 public class SourceFile {
     protected SourceFile(){}
 
-    public SourceFile(Project project, String name) {
-        sourceFileKey = new SourceFileKey(project, name);
-    }
-
-    public SourceFile(Project project, String name, String code){
-        this(project, name);
+    public SourceFile(Project project, String name, String code) {
+        this.project = project;
+        this.name = name;
         this.code = code;
+    }
+    public SourceFile(Project project, String name) {
+        this.project = project;
+        this.name = name;
     }
 
     // A SourceFile is uniquely identified by its name (path) and the project it belongs to.
-    @EmbeddedId
-    private SourceFileKey sourceFileKey;
+    @Id
+    @GeneratedValue(generator = "system-uuid") @GenericGenerator(name = "system-uuid", strategy = "uuid") @Column(name = "sourcefile_id")
+    private String id;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     private String code;
 
+    @ManyToOne
+    private Project project;
+
+    private String name;
+
     public Project getProject() {
-        return sourceFileKey.getProject();
+        return project;
     }
 
     public void setProject(Project project) {
-        sourceFileKey.setProject(project);
+        this.project = project;
     }
 
     public String getName() {
-        return sourceFileKey.getName();
+        return name;
     }
 
     public void setName(String name) {
-        sourceFileKey.setName(name);
+        this.name = name;
     }
 
     public String getCode() {
@@ -50,11 +58,11 @@ public class SourceFile {
         this.code = code;
     }
 
-    public SourceFileKey getSourceFileKey() {
-        return sourceFileKey;
+    public String getId() {
+        return id;
     }
 
-    public void setSourceFileKey(SourceFileKey key) {
-        this.sourceFileKey = key;
+    public void setId(String id) {
+        this.id = id;
     }
 }
