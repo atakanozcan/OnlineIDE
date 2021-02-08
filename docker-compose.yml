@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       context: ./discoveryserver
     image: discoveryserver:latest
-    #restart: on-failure
+    restart: on-failure
     ports:
     - 8761:8761
   gateway:
@@ -13,7 +13,7 @@ services:
       dockerfile: Dockerfile
       context: ./gateway
     image: gateway:latest
-    #restart: on-failure
+    restart: on-failure
     environment:
       - JAVA_OPTS=
         -DEUREKA_SERVER=http://discoveryserver:8761/eureka/
@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
       context: ./compiler
     image: compiler:latest
-    #restart: on-failure
+    restart: on-failure
     environment:
       - JAVA_OPTS=
         -DEUREKA_SERVER=http://discoveryserver:8761/eureka/
@@ -40,7 +40,7 @@ services:
       dockerfile: Dockerfile
       context: ./frontend
     image: frontend:latest
-    #restart: on-failure
+    restart: on-failure
     environment:
       - JAVA_OPTS=
         -DEUREKA_SERVER=http://discoveryserver:8761/eureka/
@@ -49,7 +49,7 @@ services:
     ports:
     - 4200:4200
   db:
-    image: 'postgres:11-alpine'
+    image: 'postgres:13-alpine'
     container_name: db
     environment:
       - POSTGRES_USER=admin
@@ -65,7 +65,7 @@ services:
       - discoveryserver
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/my_db/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/my_db
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=test
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update

@@ -41,27 +41,5 @@ public class ProjectApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		log.info("DataSource = " + dataSource);
-
-		String projectName = "my-project";
-
-		while(projectService.findByName(projectName) != null) {
-			log.info("The project name " + projectName + " is already taken.");
-			projectName = projectName + Math.round(Math.random()*10);
-		}
-
-		Project project = projectService.createProject(new Project(projectName, "gedfgd"));
-		log.info("ID of saved project = " + project.getId());
-
-		Project p = projectService.findByName(projectName);
-		log.info("ID of queried project = " + p.getId());
-
-		List<Project> projects = projectService.getProjects();
-		log.info("Length of project list = " + projects.size());
-
-		SourceFile sourceFile = sourceFileService.createSourceFile(new SourceFile(project, "testfile"));
-		log.info("Source file saved, name: " + sourceFile.getName() + " project ID: " + sourceFile.getProject().getId());
-
-		SourceFile s = sourceFileService.findByProjectAndName(project, "testfile");
-		log.info("Source was queried, name: " + s.getName() + " project ID: " + s.getProject().getId());
 	}
 }

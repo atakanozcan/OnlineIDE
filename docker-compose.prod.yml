@@ -1,37 +1,76 @@
 version: "3.7"
 services:
+  discoveryserver:
+    build:
+      dockerfile: Dockerfile
+      context: ./discoveryserver
+    image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/discoveryserver:latest
+    restart: on-failure
+    ports:
+      - 8761:8761
+  gateway:
+    build:
+      dockerfile: Dockerfile
+      context: ./gateway
+    image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/gateway:latest
+    restart: on-failure
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discoveryserver:8761/eureka/
+    depends_on:
+      - frontend
+      - discoveryserver
+    ports:
+      - 8000:8000
   compiler:
+    build:
+      dockerfile: Dockerfile
+      context: ./compiler
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/compiler:latest
     restart: on-failure
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discoveryserver:8761/eureka/
+    depends_on:
+      - discoveryserver
     ports:
       - 8082:8082
   frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/frontend:latest
     restart: on-failure
+    environment:
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discoveryserver:8761/eureka/
+    depends_on:
+      - discoveryserver
     ports:
-      - 80:4200
+      - 4200:4200
   db:
-    image: 'postgres:13.1-alpine'
+    image: 'postgres:13-alpine'
     container_name: db
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=test
       - POSTGRES_DB=my_db
   project:
+    build:
+      dockerfile: Dockerfile
+      context: ./project
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/project:latest
-    restart: on-failure
+    #restart: on-failure
     depends_on:
+      - discoveryserver
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/my_db
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=test
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - JAVA_OPTS=
+        -DEUREKA_SERVER=http://discoveryserver:8761/eureka/
       #- JDBC_URL=jdbc:postgresql://db:5432/my_db?user=admin&password=test
     ports:
       - 8080:8080
-  dark-mode:
-    image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/dark-mode:latest
-    restart: on-failure
-    ports:
-      - 8081:8080
