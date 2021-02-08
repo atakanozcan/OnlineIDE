@@ -28,8 +28,7 @@ public class SourceFileController {
 
     @PostMapping("/{projectName}/{fileName}")
     public SourceFile createFile(@PathVariable String projectName, @PathVariable String fileName) {
-        return sourceFileService.createSourceFile(new SourceFile(projectService.findByName(projectName),
-                fileName));
+        return sourceFileService.createSourceFile(new SourceFile(projectService.findByName(projectName), fileName));
     }
 
     @DeleteMapping("/{projectName}/{fileName}")

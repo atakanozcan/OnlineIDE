@@ -1,17 +1,11 @@
 version: "3.7"
 services:
   discoveryserver:
-    build:
-      dockerfile: Dockerfile
-      context: ./discoveryserver
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/discoveryserver:latest
     restart: on-failure
     ports:
       - 8761:8761
   gateway:
-    build:
-      dockerfile: Dockerfile
-      context: ./gateway
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/gateway:latest
     restart: on-failure
     environment:
@@ -23,9 +17,6 @@ services:
     ports:
       - 8000:8000
   compiler:
-    build:
-      dockerfile: Dockerfile
-      context: ./compiler
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/compiler:latest
     restart: on-failure
     environment:
@@ -36,9 +27,6 @@ services:
     ports:
       - 8082:8082
   frontend:
-    build:
-      dockerfile: Dockerfile
-      context: ./frontend
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/frontend:latest
     restart: on-failure
     environment:
@@ -56,9 +44,6 @@ services:
       - POSTGRES_PASSWORD=test
       - POSTGRES_DB=my_db
   project:
-    build:
-      dockerfile: Dockerfile
-      context: ./project
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/project:latest
     #restart: on-failure
     depends_on:

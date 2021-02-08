@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -20,6 +21,9 @@ public class Project {
     @CollectionTable(name = "project_project_users", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "userIds")
     private Set<String> userIds = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.REMOVE)
+    private List<SourceFile> sourceFiles;
 
     // ... additional members, often include @OneToMany mappings
     protected Project() {

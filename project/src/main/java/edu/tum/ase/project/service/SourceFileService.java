@@ -2,20 +2,19 @@ package edu.tum.ase.project.service;
 
 import edu.tum.ase.project.model.Project;
 import edu.tum.ase.project.model.SourceFile;
-import edu.tum.ase.project.model.SourceFileKey;
 import edu.tum.ase.project.repository.SourceFileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Source;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,11 +36,18 @@ public class SourceFileService {
         }
 
     }
-    
+
     public SourceFile findByProjectAndName(Project project, String name){
-        return sourceFileRepository.findBySourceFileKey(new SourceFileKey(project, name));
+        List<SourceFile> files = sourceFileRepository.findByProjectAndName(project, name);
+        if(files.size() > 1) {
+            log.warn("More than one file with name " + name + " found in project " + project.getName());
+        }
+        if (files.size() > 0) {
+            return files.get(0);
+        }
+        return null;
     }
-    
+
     public List<SourceFile> getAllSourceFiles(){
         return sourceFileRepository.findAll();
     }
@@ -49,14 +55,15 @@ public class SourceFileService {
     public List<SourceFile> getAllFilesOfProject(String projectName) {
         return getAllSourceFiles()
                 .stream()
+                .filter(sourceFile -> sourceFile.getProject() != null)
                 .filter(sourceFile -> sourceFile.getProject().getName().equals(projectName))
                 .collect(Collectors.toList());
     }
-    
+
     public void removeSourceFile(SourceFile sourceFile) {
         sourceFileRepository.delete(sourceFile);
     }
-    
+
     public void updateSourceFile(SourceFile sourceFile) {
         sourceFileRepository.save(sourceFile);
     }
