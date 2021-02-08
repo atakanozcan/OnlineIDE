@@ -73,7 +73,7 @@ export class EditorComponent implements OnInit {
     this.compiler.compile(file).subscribe(response =>{
       console.log(response)
       if(response.compilable) {
-        this.compilationResult = "Successfully compiled. Output: " + response.stdout;
+        this.compilationResult = response.stdout + " Successfully compiled.";
       } else {
         this.compilationResult = response.stderr;
       }

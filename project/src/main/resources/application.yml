@@ -3,8 +3,12 @@ spring:
     active: prod
   application:
     name: project-service
-server:
     port: ${PORT:8080} # or ${PORT:8081}
+  jba:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 eureka:
   client:
     serviceUrl:
@@ -32,15 +36,16 @@ spring:
     password: onlineide
   # Specifying the SQL dialect makes Hibernate generate better SQL for the chosen database
   jpa:
+    hibernate:
+      ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
+      # `ddl-auto` property is used to automatically create the tables based on the entity classes
+      use-new-id-generator-mappings: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           lob:
             non_contextual_creation: true # fixes Hibernate issue: https://github.com/spring-projects/spring-boot/issues/12007
-    hibernate:
-      ddl-auto: update # Hibernate ddl auto (create, create-drop, validate, update)
-      # `ddl-auto` property is used to automatically create the tables based on the entity classes
 ---
 spring:
   config:
@@ -59,7 +64,8 @@ spring:
       use-new-id-generator-mappings: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           lob:
             non_contextual_creation: true
+

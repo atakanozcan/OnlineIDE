@@ -15,7 +15,7 @@ services:
       - frontend
       - discoveryserver
     ports:
-      - 8000:8000
+      - 80:8000
   compiler:
     image: gitlab.lrz.de:5005/ase20-group2-3/onlineide/compiler:latest
     restart: on-failure
