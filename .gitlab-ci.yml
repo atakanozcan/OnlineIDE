@@ -91,9 +91,7 @@ gateway:build:
 compiler:test:
     stage: test
     script: mvn -f ./compiler/pom.xml test
-    only:
-        changes:
-            - compiler/**/*
+
 
 # Package Jobs
 project:package:
