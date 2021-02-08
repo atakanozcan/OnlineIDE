@@ -86,6 +86,11 @@ public class ProjectController {
 
     @GetMapping("/projects/{projectName}/{userId}")
     public void shareProject(@PathVariable String projectName, @PathVariable String userId) {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (userId.isEmpty() || userId.equals(authentication.getName())) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+        }
         String jsonStr = operations.getForObject(
                 "https://gitlab.lrz.de/api/v4/search?scope=users&search="+ userId,
                 String.class
