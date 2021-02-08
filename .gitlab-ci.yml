@@ -304,13 +304,13 @@ discoveryserver:publish:
         DOCKER_HOST: tcp://docker:2375
         IMAGE_NAME: $CI_REGISTRY_IMAGE/discoveryserver
     script:
-        - cd project
+        - cd discoveryserver
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
     only:
         changes:
-            - project/**/*
+            - discoveryserver/**/*
         refs:
             - master
             - deploy
@@ -327,13 +327,13 @@ gateway:publish:
         DOCKER_HOST: tcp://docker:2375
         IMAGE_NAME: $CI_REGISTRY_IMAGE/gateway
     script:
-        - cd project
+        - cd gateway
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build --tag $IMAGE_NAME:latest .
         - docker push $IMAGE_NAME:latest
     only:
         changes:
-            - project/**/*
+            - gateway/**/*
         refs:
             - master
             - deploy
