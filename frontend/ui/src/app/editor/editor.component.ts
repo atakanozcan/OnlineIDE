@@ -39,6 +39,7 @@ export class EditorComponent implements OnInit {
   loadFile(): void {
     this.filesService.getFile(this.fileName, this.projectName).subscribe(file => {
       this.file = file;
+      this.lastSavedCode = this.file.code;
       this.editorOptions = {theme: 'vs-dark', language: this.deductProgrammingLanguage(file.name)};
       console.log(this.editorOptions)
     });
